@@ -10,5 +10,21 @@ TEST(MyFirstTest, MyFirstTestCase) {
 
 TEST(CalculatorTest, TestOperatorPlus) {
     auto result = calculate("2 2 +");
-    EXPECT_EQ(4, result);
+    EXPECT_DOUBLE_EQ(4, result);
 }
+
+TEST(CalculatorTest, TestOperatorMinus) {
+    auto result = calculate("2 2 -");
+    EXPECT_DOUBLE_EQ(0, result);
+}
+
+TEST(CalculatorTest, TestOperatorMultiply) {
+    auto result = calculate("2 3 *");
+    EXPECT_DOUBLE_EQ(6, result);
+}
+
+TEST(CalculatorTest, TestOperatorDivide) {
+    auto result = calculate("6 2 /");
+    EXPECT_DOUBLE_EQ(3, result);
+}
+
