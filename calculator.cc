@@ -19,11 +19,21 @@ std::vector<std::string> split(const std::string& str, char delim = ' ')
     return container;
 }
 
+enum CalcState {
+    Success,
+    DivisionByZero,
+    DoubleOverflow
+};
+
 struct Result {
     double result;
     bool state;
     Result(double d , bool b): result(d = 0), state(b = true) {}
 };
+
+Result containerWorker(const std::vector<std::string> container) {
+    if(container.size() < 3) return new
+}
 
 
 Result calculate( const std::string input )
@@ -36,9 +46,8 @@ Result calculate( const std::string input )
     // catch errors: less than 3 elements, not 3+2*n elements
     // catch errors: not double or not operation symbol
 
-    if(container.size())
+    if(container.size()) a = container[0];
     for(auto it : container) {
-
 
         auto b = std::stod(*it++);
         auto c = container[2][0];
