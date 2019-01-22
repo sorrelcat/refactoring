@@ -1,68 +1,41 @@
-#include "calculator.h"
-
+#include"calculator.hpp"
+#include <string>
 #include <sstream>
+#include <algorithm>
+#include <iterator>
 #include <vector>
-#include <stack>
-
-std::vector<std::string> split(const std::string &s, char delim);
-
-double calculate(const std::string& eval)
+/*
+ * Calculator by MK
+*/
+// Not obvious what is funciton result
+void split(const std::string& str, std::vector<std::string>& container, char delim = ' ')
 {
-    auto splittedFormula = split(eval, ' ');
-    std::stack<double> result;
-
-    for(auto& elem : splittedFormula)
-    {
-        if (elem == "*")
-        {
-            double second = result.top();
-            result.pop();
-            double first = result.top();
-            result.pop();
-            result.push(first * second);
-        }
-        else if (elem == "+")
-        {
-            double second = result.top();
-            result.pop();
-            double first = result.top();
-            result.pop();
-            result.push(first + second);
-        }
-        else if (elem == "-")
-        {
-            double second = result.top();
-            result.pop();
-            double first = result.top();
-            result.pop();
-            result.push(first - second);
-        }
-        else if (elem == "/")
-        {
-            double second = result.top();
-            result.pop();
-            double first = result.top();
-            result.pop();
-            result.push(first / second);
-        }
-        else
-        {
-            double res =  std::stod(elem);
-            result.push(res);
-        }
+    std::stringstream ss(str);
+    std::string token;
+    // Not obvious that get line will fetch elements splitted by space
+    while (std::getline(ss, token, delim)) {
+        container.push_back(token);
     }
-
-    return result.top();
 }
 
-std::vector<std::string> split(const std::string &s, char delim)
+double calculate( const std::string input )
 {
-    std::stringstream ss(s);
-    std::string item;
-    std::vector<std::string> elems;
-
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(std::move(item));
+    std::vector<std::string> container;
+    split ( input, container );
+    auto a = std::stod( container[0]);
+    auto b = std::stod( container[1]);
+    char c = container[2][0];
+    double result;
+    switch (c)
+    {
+    case '+': result = a + b;
+        break;
+    case '-': result = a - b;
+        break;
+    case '*': result = a * b;
+        break;
+    case '/': result = a / b;
+        break;
     }
-    return elems;
+    return result;
 }
