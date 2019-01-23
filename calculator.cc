@@ -7,6 +7,9 @@
 /*
  * Calculator by MK
 */
+
+Result calculate(const double a, const double b, const char op);
+
 std::vector<std::string> split(const std::string& str, char delim = ' ')
 {
     std::vector<std::string> container;
@@ -20,50 +23,81 @@ std::vector<std::string> split(const std::string& str, char delim = ' ')
 }
 
 enum CalcState {
+    SomeError,
     Success,
     DivisionByZero,
-    DoubleOverflow
+    DoubleOverflow,
+    ErrorString
 };
 
 struct Result {
-    double result;
-    bool state;
-    Result(double d , bool b): result(d = 0), state(b = true) {}
+    double value;
+    CalcState state;
+    Result(double d , CalcState s): value(d = 0), state(s = CalcState.SomeError) {}
 };
 
-Result containerWorker(const std::vector<std::string> container) {
-    if(container.size() < 3) return new
+Result containerWorker(const std::string input) {
+
+    std::vector<std::string> container = split (input);
+
+    int n = container.size();
+    double a = 0, b = 0;
+    char op = '';
+
+    if(n < 3) return new Result(0, CalcState.ErrorString);
+    if((n - 3) % 2) return new Result(0, CalcState.ErrorString);
+
+    Result result = new Result();
+
+    for(int i = 0; i < n; i++) {
+        if(n - i == 2) {
+            a = result.value;
+        }
+        else {
+            try {
+                a = std::stod(container[i]);
+            }
+            catch(Exception e) {
+                return new Result(0, CalcState.ErrorString);
+            }
+        }
+        try{
+            b = std::stod(container[i]);
+            op = container[i+1][0];
+            result = calculate(result.value, b, op);
+        }
+        catch(Exception e) {
+            return new Result(0, CalcState.ErrorString);
+        }
+    }
+    return result;
 }
 
-
-Result calculate( const std::string input )
+Result calculate(const double a, const double b, const char op)
 {
-    Result t;
-    int a, b;
-    char op;
-    std::vector<std::string> container = split (input);
-    // cycle for string that can contain more than 3 elements
-    // catch errors: less than 3 elements, not 3+2*n elements
-    // catch errors: not double or not operation symbol
-
-    if(container.size()) a = container[0];
-    for(auto it : container) {
-
-        auto b = std::stod(*it++);
-        auto c = container[2][0];
-        double result;
-        switch (c)
+    Result result = new result(0, 1);
+    double epsilon = std::numeric_limits<double>::epsilon();
+    switch (op)
         {
-        case '+': result = a + b;
-            break;
-        case '-': result = a - b;
-            break;
-        case '*': result = a * b;
-            break;
-        //catch error: division by zero
-        case '/': result = a / b;
-            break;
-        }
+            case '+':
+                if(abs(a) - DBL_MAX <= epsilon || abs(b) - DBL_MAX <= epsilon)
+                {
+                    return new Result(0, 3);
+                }
+                result.value = a + b;
+                break;
+            case '-': result = a - b;
+                break;
+            case '*': result = a * b;
+                break;
+            case '/':
+                if(b == 0) {
+                    return new Result(0, 2);
+                }
+                result.value = a / b;
+                break;
+            default:
+                return new Result(0, 4);
     }
     return result;
 }
