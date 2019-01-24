@@ -9,6 +9,8 @@
 #include "divideoperation.hpp"
 #include "pair.hpp"
 
+//https://github.com/LuxoftAKutsan/calculator
+
 std::vector<std::string> split(const std::string& str, char delim = ' ')
 {
     std::vector<std::string> container;
