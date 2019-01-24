@@ -1,14 +1,13 @@
-#include"calculator.hpp"
 #include <string>
 #include <sstream>
 #include <algorithm>
 #include <iterator>
 #include <vector>
-/*
- * Calculator by MK
-*/
-
-Result calculate(const double a, const double b, const char op);
+#include "plusoperation.hpp"
+#include "minusoperation.hpp"
+#include "multiplyoperation.hpp"
+#include "divideoperation.hpp"
+#include "pair.hpp"
 
 std::vector<std::string> split(const std::string& str, char delim = ' ')
 {
@@ -22,21 +21,10 @@ std::vector<std::string> split(const std::string& str, char delim = ' ')
     return container;
 }
 
-enum CalcState {
-    SomeError,
-    Success,
-    DivisionByZero,
-    DoubleOverflow,
-    ErrorString
-};
+double calculate(double, double, char);
+IOperation chooseOperation(char op);
 
-struct Result {
-    double value;
-    CalcState state;
-    Result(double d , CalcState s): value(d = 0), state(s = CalcState.SomeError) {}
-};
-
-Result containerWorker(const std::string input) {
+double containerWorker(const std::string input) {
 
     std::vector<std::string> container = split (input);
 
@@ -44,60 +32,46 @@ Result containerWorker(const std::string input) {
     double a = 0, b = 0;
     char op = '';
 
-    if(n < 3) return new Result(0, CalcState.ErrorString);
-    if((n - 3) % 2) return new Result(0, CalcState.ErrorString);
+    if(n < 3) throw std::invalid_argument("Too short string");
+    if((n - 3) % 2) throw std::invalid_argument("String with incorrect number of arguments");
 
-    Result result = new Result();
-
-    for(int i = 0; i < n; i++) {
-        if(n - i == 2) {
-            a = result.value;
-        }
-        else {
-            try {
-                a = std::stod(container[i]);
-            }
-            catch(Exception e) {
-                return new Result(0, CalcState.ErrorString);
-            }
-        }
-        try{
-            b = std::stod(container[i]);
-            op = container[i+1][0];
-            result = calculate(result.value, b, op);
-        }
-        catch(Exception e) {
-            return new Result(0, CalcState.ErrorString);
-        }
+    try {
+        a = std::stod(container[0]);
+        b = std::stod(container[1]);
+        op = container[2][0];
     }
+    catch (Exception e) {
+        throw std::invalid_argument;
+    }
+
+    IOperation operation = chooseOperation(op);
+    double result = calculate(a, b, operation);
+
+    int i = 2;
+    while(i < n) {
+        b = std::stod(container[i]);
+        op = container[i+1];
+        operation = chooseOperation(op);
+        i += 2;
+        result = calculate(result, b, op);
+    }
+
     return result;
 }
 
-Result calculate(const double a, const double b, const char op)
-{
-    Result result = new result(0, 1);
-    double epsilon = std::numeric_limits<double>::epsilon();
-    switch (op)
-        {
-            case '+':
-                if(abs(a) - DBL_MAX <= epsilon || abs(b) - DBL_MAX <= epsilon)
-                {
-                    return new Result(0, 3);
-                }
-                result.value = a + b;
-                break;
-            case '-': result = a - b;
-                break;
-            case '*': result = a * b;
-                break;
-            case '/':
-                if(b == 0) {
-                    return new Result(0, 2);
-                }
-                result.value = a / b;
-                break;
-            default:
-                return new Result(0, 4);
-    }
-    return result;
+double calculate(double a, double b, IOperation op) {
+
+    Pair arguments = new Pair(a, b);
+    return op.operate(arguments);
 }
+
+IOperation chooseOperation(char op) {
+    switch(op) {
+        case '+': return new PlusOperation();
+        case '-': return new MinusOperation();
+        case '*': return new MultiplyOperation();
+        case '/': return new DivideOperation();
+        default: throw std::invalid_argument;
+    }
+}
+
