@@ -24,11 +24,12 @@ double containerWorker(const std::string input) {
     std::vector<std::string> container = split (input);
 
     int n = container.size();
-    double a = 0, b = 0;
-    char op = ' ';
 
     if(n < 3) throw std::invalid_argument("Too short string");
     if((n - 3) % 2) throw std::invalid_argument("String with incorrect number of arguments");
+
+    double a = 0, b = 0;
+    char op = ' ';
 
     try {
         a = std::stod(container[0]);
@@ -43,8 +44,9 @@ double containerWorker(const std::string input) {
 
     double result = calc.calculate();
 
-    int i = 2;
+    int i = 3;
     while(i < n) {
+        a = result;
         b = std::stod(container[i]);
         op = container[i+1][0];
         i += 2;

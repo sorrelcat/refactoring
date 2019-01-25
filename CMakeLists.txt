@@ -14,6 +14,8 @@ set(SOURCES
 	ioperation.cc
 )
 
+set(CMAKE_CXX_FLAGS '-g')
+
 add_executable(calculator_test
                 calculator_test.cc
                 ${SOURCES})
