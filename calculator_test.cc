@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
-#include "calculator.cc"
+#include "calculator.hpp"
+
+
 
 TEST(MyFirstTest, MyFirstTestCase) {
     int x = 1;
@@ -7,8 +9,10 @@ TEST(MyFirstTest, MyFirstTestCase) {
     EXPECT_EQ(x, y);
     EXPECT_TRUE(x == y);
 }
-
+/*
 TEST(CalculatorTest, TestOperatorPlus) {
+
+    Calculator calc = new Calculator();
     auto result = calculate("2 2 +");
     EXPECT_DOUBLE_EQ(4, result);
 }
@@ -117,14 +121,6 @@ TEST(CalculatorTest, TestDoubleDivideOverflow) {
     auto result = calculate("DBL_MAX 0.5 +");
     EXPECT_DOUBLE_EQ(std::overflow_error, result);
 }
-
-
-
-/*
-operation with doubles
-numeric limits with plus
-numeric limits with minus
-numeric limits with multiply
-numeric limits with division
 */
+
 

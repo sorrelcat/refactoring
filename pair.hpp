@@ -2,8 +2,7 @@
 #define PAIR_H
 
 
-Pair::Pair()
-{
+class Pair {
 private:
     double a;
     double b;
@@ -12,6 +11,6 @@ public:
     void setB(double value);
     double getA();
     double getB();
-}
+};
 
 #endif // PAIR_H

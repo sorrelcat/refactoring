@@ -3,7 +3,7 @@
 #include "ioperation.hpp"
 
 
-class PlusOperation : public Operation
+class PlusOperation : public IOperation
 {
 public:
     const double operate(Pair operands);

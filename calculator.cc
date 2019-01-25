@@ -8,6 +8,7 @@
 #include "multiplyoperation.hpp"
 #include "divideoperation.hpp"
 #include "pair.hpp"
+#include "calculator.hpp"
 
 //https://github.com/LuxoftAKutsan/calculator
 
@@ -23,16 +24,13 @@ std::vector<std::string> split(const std::string& str, char delim = ' ')
     return container;
 }
 
-double calculate(double, double, char);
-IOperation chooseOperation(char op);
-
 double containerWorker(const std::string input) {
 
     std::vector<std::string> container = split (input);
 
     int n = container.size();
     double a = 0, b = 0;
-    char op = '';
+    char op = ' ';
 
     if(n < 3) throw std::invalid_argument("Too short string");
     if((n - 3) % 2) throw std::invalid_argument("String with incorrect number of arguments");
@@ -42,38 +40,47 @@ double containerWorker(const std::string input) {
         b = std::stod(container[1]);
         op = container[2][0];
     }
-    catch (Exception e) {
-        throw std::invalid_argument;
+    catch (std::exception e) {
+        throw std::invalid_argument ("Can't read arguments");
     }
 
-    IOperation operation = chooseOperation(op);
-    double result = calculate(a, b, operation);
+    Calculator calc(a, b, op);
+
+    double result = calc.calculate();
 
     int i = 2;
     while(i < n) {
         b = std::stod(container[i]);
-        op = container[i+1];
-        operation = chooseOperation(op);
+        op = container[i+1][0];
         i += 2;
-        result = calculate(result, b, op);
+        calc.setAll(a, b, op);
+        result = calc.calculate();
     }
 
     return result;
 }
 
-double calculate(double a, double b, IOperation op) {
-
-    Pair arguments = new Pair(a, b);
-    return op.operate(arguments);
+Calculator::Calculator (double a = 0, double b = 0, char op = '+'){
+    setAll(a, b, op);
 }
 
-IOperation chooseOperation(char op) {
+void Calculator::setAll(double a, double b, char op) {
+    arguments.setA(a);
+    arguments.setB(b);
+    operation = chooseOperation(op);
+}
+
+double Calculator::calculate() {
+    return operation->operate(arguments);
+}
+
+IOperation* Calculator::chooseOperation(char op) {
     switch(op) {
         case '+': return new PlusOperation();
         case '-': return new MinusOperation();
         case '*': return new MultiplyOperation();
         case '/': return new DivideOperation();
-        default: throw std::invalid_argument;
+        default: throw std::invalid_argument("Can't read operation sign");
     }
 }
 
