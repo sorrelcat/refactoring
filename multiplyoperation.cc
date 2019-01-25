@@ -2,5 +2,5 @@
 
 
 const double MultiplyOperation::operate(Pair operands) {
-    return operands.getA() * operands.gitB();
+    return operands.getA() * operands.getB();
 }

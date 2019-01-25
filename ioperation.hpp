@@ -6,7 +6,7 @@
 class IOperation {
 public:
     virtual const double operate(Pair operands) = 0;
-    virtual ~IOperation() = 0;
+    virtual ~IOperation() = default;
 };
 
 #endif // IOPERATION_H

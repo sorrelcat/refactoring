@@ -5,7 +5,14 @@ project(calculator)
 add_subdirectory(googletest)
 
 set(SOURCES
-    calculator.cc)
+    calculator.cc
+	pair.cc
+	plusoperation.cc
+	minusoperation.cc
+	divideoperation.cc
+	multiplyoperation.cc
+	ioperation.cc
+)
 
 add_executable(calculator_test
                 calculator_test.cc
