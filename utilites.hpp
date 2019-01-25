@@ -46,12 +46,16 @@ double containerWorker(const std::string input) {
 
     int i = 3;
     while(i < n) {
-        a = result;
-        b = std::stod(container[i]);
-        op = container[i+1][0];
-        i += 2;
-        calc.setAll(a, b, op);
-        result = calc.calculate();
+        try {
+            b = std::stod(container[i]);
+            op = container[i+1][0];
+            i += 2;
+            calc.setAll(result, b, op);
+            result = calc.calculate();
+        }
+        catch (std::exception e) {
+            throw std::invalid_argument ("Can't read arguments");
+        }
     }
 
     return result;
