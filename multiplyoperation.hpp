@@ -1,7 +1,6 @@
 #ifndef MULTIPLYOPERATION_H
 #define MULTIPLYOPERATION_H
 #include "ioperation.hpp"
-#include "pair.hpp"
 
 
 class MultiplyOperation : public IOperation

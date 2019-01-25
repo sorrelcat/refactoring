@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
-#include "calculator.hpp"
-
-
+#include "utilites.hpp"
 
 TEST(MyFirstTest, MyFirstTestCase) {
     int x = 1;
@@ -9,6 +7,32 @@ TEST(MyFirstTest, MyFirstTestCase) {
     EXPECT_EQ(x, y);
     EXPECT_TRUE(x == y);
 }
+
+TEST(SplitTest, StringWithoutSpaces) {
+    std::string s = "qwertyuiop";
+    std::vector<std::string> v;
+    v.push_back(s);
+    EXPECT_EQ(v, split(s));
+}
+
+TEST(SplitTest, StringWithSpaces1) {
+    std::string s = "qwe rty uiop";
+    std::vector<std::string> v;
+    v.push_back("qwe");
+    v.push_back("rty");
+    v.push_back("uiop");
+    EXPECT_EQ(v, split(s));
+}
+
+TEST(SplitTest, StringWithSpaces2) {
+    std::string s = "2 3 +";
+    std::vector<std::string> v;
+    v.push_back("2");
+    v.push_back("3");
+    v.push_back("+");
+    EXPECT_EQ(v, split(s));
+}
+
 /*
 TEST(CalculatorTest, TestOperatorPlus) {
 

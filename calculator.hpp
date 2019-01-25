@@ -1,7 +1,10 @@
 #ifndef CALCULATOR_HPP
 #define CALCULATOR_HPP
-#include "pair.hpp"
-#include "ioperation.hpp"
+#include "plusoperation.hpp"
+#include "minusoperation.hpp"
+#include "multiplyoperation.hpp"
+#include "divideoperation.hpp"
+#include <stdexcept>
 
 class Calculator {
 private:
